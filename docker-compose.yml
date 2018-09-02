@@ -13,3 +13,5 @@ sentinel:
   links:
     - master:redis-master
     - slave
+  ports:
+    - "26379:26379"
