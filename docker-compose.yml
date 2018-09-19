@@ -1,14 +1,21 @@
 master:
   image: redis:3
+  volumes:
+  - ./data/master:/data/redis_cache
   ports:
     - "6379:6379"  
-# slave:
-#   image: redis:3
-#   command: redis-server --slaveof redis-master 6379
-#   links:
-#     - master:redis-master
-#   ports:
-#     - "6379:6379"    
+
+slave:
+  image: redis:3
+  command: redis-server --slaveof redis-master 6379
+  links:
+    - master:redis-master
+  volumes:
+  - ./data/slave:/data/redis_cache
+
+  ports:
+    - "6380:6379" 
+
 sentinel:
   build: sentinel
   environment:
@@ -16,6 +23,9 @@ sentinel:
     - SENTINEL_FAILOVER=5000    
   links:
     - master:redis-master
-    # - slave
+    - slave
+
+  volumes:
+    - ./data/sentinel:/data/redis_cache    
   ports:
     - "26379:26379"
