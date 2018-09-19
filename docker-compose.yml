@@ -1,6 +1,7 @@
 master:
   image: redis:3
   volumes:
+  - ./redis/redis.conf:/usr/local/etc/redis/redis.conf 
   - ./data/master:/data/redis_cache
   ports:
     - "6379:6379"  
@@ -26,6 +27,7 @@ sentinel:
     - slave
 
   volumes:
+    - ./redis/redis.conf:/usr/local/etc/redis/redis.conf 
     - ./data/sentinel:/data/redis_cache    
   ports:
     - "26379:26379"
